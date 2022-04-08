@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+
+import { BrowserRouter as Router, Switch, Routes, Route } from 'react-router-dom';
 import './App.css';
+import AllPokemon from './components/AllPokemon';
+import PokemonCard from './components/PokemonCard';
+import SearchBar from './components/SearchBar';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      My Pokedex
+      <div>
+        <Router>
+          <Routes>
+          
+              <Route exact path="/" 
+              element={<AllPokemon/>}
+              render={(props) => <SearchBar {...props} />}/>
+
+              <Route exact path="/:pokemonId" 
+              // element={<AllPokemon/>}
+              render={(props) => <PokemonCard {...props} />}/>  
+         
+          </Routes>
+        </Router>
+      {/* <AllPokemon exact path="/" element={(props) => <SearchBar {...props} />}/> */}
+      
+        
+      </div>
+      
     </div>
   );
 }
