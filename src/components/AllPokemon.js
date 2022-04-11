@@ -3,33 +3,96 @@ import { getPokemons } from '../services/pokemons'
 import PokemonCard from './PokemonCard'
 import SearchBar from './SearchBar';
 import axios from 'axios';
+import { toFirstCharUppercase} from "../constants"
+import { CircularProgress } from '@material-ui/core'
 
-const AllPokemon = () => {
+const AllPokemon = (props) => {
     const [pokemons, setPokemons] = useState([])
 
+    // useEffect(() => {
+    //     getPokemons().then((data) => {
+    //         setPokemons(data);
+    //     })
+    // }, [])
+
+       // console.log(pokemons)
+    // const [pokemons, setPokemons] = useState([])
+    const { history } = props;
+    const [pokemonData, setPokemonData] = useState({})
+    const [filter, setFilter] = useState("");
+    
     useEffect(() => {
-        getPokemons().then((data) => {
-            setPokemons(data);
-        })
-    }, [])
+        axios
+          .get(`https://pokeapi.co/api/v2/pokemon?limit=151`)
+          .then(function (response) {
+            const { data } = response;
+            const { results } = data;
+            const newPokemonData = {};
+            results.forEach((pokemon, index) => {
+                // console.log(pokemon)
+              newPokemonData[index + 1] = {
+                id: index + 1,
+                name: pokemon.name,
+                sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                    index + 1}.png`,
+              };
+            });
+            setPokemonData(newPokemonData);
+            // console.log(newPokemonData)
+          });
+      }, []);
+
+    const inputHandler = (event) => {
+        event.preventDefault()
+        
+        // console.log("inputloooooower",event.target.value)
+        setFilter(event.target.value);
+
+    }
+
+    const getPokemonCard = (pokemonId) => {
+        const { id, name, sprite } = pokemonData[pokemonId];
+        return (
+          <div  key={pokemonId}>
+            {console.log(id)}
+            <div onClick={() => history.push(`/${id}`)}>
+              <div>
+              <img src={sprite} style={{ width: "130px", height: "130px" }}/>
+              </div> 
+              <div>
+                <div>{`${id}. ${toFirstCharUppercase(name)}`}</div>
+              </div>
+            </div>
+          </div>
+        );
+      };
 
     
-
-    
-
-    // console.log("pokeeemons",pokemons)
-    // console.log("objeeect",Object.entries(pokemons)[3] &&  Object.entries(pokemons)[3][1])
   return (
     <div>
-        <SearchBar pokemons={pokemons}> </SearchBar>
-
-        {/* {Object.entries(pokemons)[3] && 
-            Object.entries(pokemons)[3][1].map ((pokemon, index) => {
-            return <PokemonCard key = {index} {...pokemon} id={index + 1} />
-        })} */}
-       
-        AllPokemon in here
+        <input
+        type = "search"
+        onChange={inputHandler}
+        value= {filter}
+        placeholder='Search...'
         
+        />
+        <div>
+        {pokemonData ? (
+        <div  >
+          {Object.keys(pokemonData).map(
+            (pokemonId) =>
+              pokemonData[pokemonId].name.includes(filter) &&
+              getPokemonCard(pokemonId)
+              
+          )}
+        </div>
+      ) : (
+        <CircularProgress/>
+      )}
+
+        </div>
+
     </div>
   )
 }
