@@ -27,8 +27,9 @@ const PokemonCard = (props) => {
 
 
   const generatePokemon = (pokemon) => {
+    console.log(pokemon)
     const {name, id, species, height, weight, types, sprites} = pokemon;
-    const fullImageUrl = `https://pokeres.bastionbot.org/images/pokemon/${id}.png`;
+    // const fullImageUrl = `https://pokeres.bastionbot.org/images/pokemon/${id}.png`;
     const {front_default} = sprites;
 
     return (
@@ -39,7 +40,7 @@ const PokemonCard = (props) => {
       </div>
   
       <div>
-      <img style={{ width: "300px", height: "300px" }} src={fullImageUrl} alt=""/>
+      <img style={{ width: "150px", height: "150px" }} src={front_default} alt=""/>
       <p>Pokemon info</p>
       <div>
         {"Species:"}
