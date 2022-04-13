@@ -1,17 +1,14 @@
-
-import {  Switch, Routes, Route } from 'react-router-dom';
-import './App.css';
+import { Switch, Route } from 'react-router-dom';
 import AllPokemon from './components/AllPokemon';
+import Header from './components/Header';
 import PokemonCard from './components/PokemonCard';
-import SearchBar from './components/SearchBar';
 
 
 function App() {
   return (
     <div className="App">
-      My Pokedex
+      <Header />
       <div>
-        
         <Switch>
           <Route exact path="/" render={(props) => <AllPokemon {...props} />} />
           <Route
@@ -20,9 +17,7 @@ function App() {
             render={(props) => <PokemonCard {...props} />}
           />
         </Switch>
-
       </div>
-      
     </div>
   );
 }
